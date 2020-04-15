@@ -1,5 +1,5 @@
 module.exports.run = (client, serverInfo, member, colours) => {
-    client.guilds.get(serverInfo.guildId).channels.get(serverInfo.textchannels.services).send({
+    client.guilds.get(serverInfo.guildId).channels.get(serverInfo.textchannels.spylog).send({
         embed: {
             author: {
                 name: client.user.username,

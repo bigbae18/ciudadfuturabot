@@ -19,6 +19,7 @@ export default class AvatarCommand extends Command {
 
     async exec(message, args) {
         try {
+            await message.delete(1)
             if (!args.miembro) {
                 return message.util.send({
                     embed: {
@@ -40,7 +41,7 @@ export default class AvatarCommand extends Command {
 
                 return message.util.send({
                     embed: {
-                        title: 'Avatar de <@' + member.user.nickname + '>',
+                        title: 'Avatar de <@' + member.user.tag + '>',
                         color: colours.black,
                         image: {
                             url: member.user.displayAvatarURL

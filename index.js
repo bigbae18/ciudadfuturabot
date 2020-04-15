@@ -2,8 +2,9 @@ import { AkairoClient } from 'discord-akairo'
 import { botToken, ownerID, prefix } from './core/config'
 import { join } from 'path'
 import colours from './utils/colours'
+import discordIRC from 'discord-irc';
+import IRCconfig from './IRCconfig.json';
 
-const Discord = require('discord.js');
 const chalk = require('chalk');
 const serverInfo = require('./serverinfo');
 
@@ -16,6 +17,8 @@ const client = new AkairoClient({
   commandUtilLifetime: 600000,
   commandDirectory: join(__dirname, 'commands')
 })
+
+
 const bot = (client)
 
 // Llamamos al archivo MySQL
@@ -24,12 +27,13 @@ let sql = require('./core/mysql');
 client.on('ready', () => {
   console.log('<> ' + chalk.yellow.bold.underline('CiudadFutura') + ' - ' + chalk.cyan.bold.underline('Desarrollado por Niniohh') + ' <>')
   console.log('<> ' + chalk.green.bold.underline('El bot está en línea') + ' <>')
-  console.log(`\r\n\n-------- Stats --------\r\nServidores: ${client.guilds.size}\r\nCanales: ${client.channels.size}\r\nMiembros: ${client.users.size}`)
+  console.log(`\r\n\n-------- Stats --------\r\nServidores: ${client.guilds.size}\r\nCanales: ${client.channels.size}\r\nMiembros: ${client.users.size}\n\n\n`)
 })
 
 const run = async () => {
     try {
       await client.login(botToken)
+      discordIRC(IRCconfig);
 
       client.user.setStatus('dnd');
       client.user.setActivity('CiudadFutura || keko.cf || ciudadfutura.vip', { type: 'PLAYING' })
@@ -47,6 +51,14 @@ const run = async () => {
 
       client.on('guildMemberUpdate', (oldMember, newMember) => {
         require('./events/guildMemberUpdate').run(client, serverInfo, oldMember, newMember, colours)
+      })
+
+      client.on('messageDelete', messageDelete => {
+        require('./events/messageDelete').run(client, serverInfo, messageDelete, colours)
+      })
+
+      client.on('messageUpdate', (oldMessage, newMessage) => {
+        require('./events/messageUpdate').run(client, serverInfo, oldMessage, newMessage, colours)
       })
 
       // Si detecta algún error, lo tira en la consola
