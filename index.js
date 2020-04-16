@@ -33,7 +33,6 @@ client.on('ready', () => {
 const run = async () => {
     try {
       await client.login(botToken)
-      discordIRC(IRCconfig);
 
       client.user.setStatus('dnd');
       client.user.setActivity('CiudadFutura || keko.cf || ciudadfutura.vip', { type: 'PLAYING' })
@@ -60,6 +59,8 @@ const run = async () => {
       client.on('messageUpdate', (oldMessage, newMessage) => {
         require('./events/messageUpdate').run(client, serverInfo, oldMessage, newMessage, colours)
       })
+
+      discordIRC(IRCconfig);
 
       // Si detecta algún error, lo tira en la consola
     } catch (e) {
